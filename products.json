@@ -1,5 +1,42 @@
 [
-  { "sniker": "Air Force I", "brand": "Nike", "id": 1 },
-  { "sniker": "Air I", "brand": "Jordan", "id": 2 },
-  { "sniker": "AllStar", "brand": "Adidas", "id": 3 }
+  {
+    "sniker": "Air Force I",
+    "brand": "Nike",
+    "price": "USD$ 200",
+    "thumbnail": "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/f094af40-f82f-4fb9-a246-e031bf6fc411/calzado-air-force-1-07-b19lqD.png",
+    "description": "El fulgor vive en Nike Air Force 1 ’07, el ícono del básquetbol que le da un toque fresco a las características más recordadas: colores audaces y la cantidad perfecta de destellos para que brilles.",
+    "id": "1"
+  },
+  {
+    "sniker": "Air I",
+    "brand": "Jordan",
+    "price": "USD$ 400",
+    "thumbnail": "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/f094af40-f82f-4fb9-a246-e031bf6fc411/calzado-air-force-1-07-b19lqD.png",
+    "description": "El pasado 2014 vuelven las Air Jordan 1 Retro AJKO Chicago. Al igual que con el primer par lanzado en 1986, el diseño viste un esquema de colores muy similar al de las Jordan 1 OG 'Chicago'. La única diferencia notable es el talón blanco en contraposición con la talonera roja en las Chicago. Este par cuenta con una construcción de lienzo y superposiciones rojas cosidas sobre la base blanca.",
+    "id": "2"
+  },
+  {
+    "sniker": "Forum Buckle Bad Bunny",
+    "brand": "Adidas",
+    "price": "USD$ 300",
+    "thumbnail": "http://admin.digitalsport.com.ar/files/uploads/DIONYSOS%20DICIEMBRE%202020/adidas%20Forum%20Low%20Bad%20Bunny%20Pink%20Easter%20Egg.png",
+    "description": "El lanzamiento más esperado del año finalmente arriba con un mensaje de felicidad y dulzura acompañando el espíritu navideño. Las adidas Forum Buckle Low Bunny Pink Easter Egg, sucesoras de las “The First Café” x Bad Bunny, se presentan en una versión completamente rosa con el contraste proporcionado por diferentes materiales y texturas.",
+    "id": "3"
+  },
+  {
+    "sniker": "Triple S",
+    "brand": "Balenciaga",
+    "price": "USD$ 700",
+    "thumbnail": "https://tenixmx.com/wp-content/uploads/2020/09/Balenciaga-Multicolor-Triple-S_1.jpg",
+    "description": "Tenis Triple S en cuero de Balenciaga con puntera redonda, suela dentada de goma, cierre con cordón, logo bordado en la parte delantera y lengüeta en la parte posterior.",
+    "id": "4"
+  },
+  {
+    "sniker": "RS-X",
+    "brand": "Puma",
+    "price": "USD$ 150",
+    "thumbnail": "https://i.pinimg.com/736x/b4/1b/fd/b41bfd02a240b060469df90688df9414.jpg",
+    "description": "Diseñadas para los nativos digitales de hoy, la línea RS-Fast tiene un diseño elegante que es más rápido y más competitivo que cualquier otro modelo del Running System. Están influidas por los modelos de tendencia del 2000 para crear un estilo que es realmente actual. Las RS-Fast Limiter tienen un empeine de malla con revestimientos de cuero y una mediasuela de PU que proporcionan un paso suave y cómodo.",
+    "id": "5"
+  }
 ]

@@ -110,29 +110,33 @@ var Productos = /** @class */ (function () {
                 }
             });
         }); };
-        this.put = function (id, sniker, brand) { return __awaiter(_this, void 0, void 0, function () {
+        this.put = function (id, sniker, brand, price, thumbnail, description) { return __awaiter(_this, void 0, void 0, function () {
             var products, getProduct, error_4;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 2, , 3]);
+                        _a.trys.push([0, 5, , 6]);
                         return [4 /*yield*/, this.getAll()];
                     case 1:
                         products = _a.sent();
                         getProduct = products.find(function (product) { return product.id === id; });
-                        if (getProduct) {
-                            getProduct.sniker = sniker;
-                            getProduct.brand = brand;
-                        }
-                        else {
-                            return [2 /*return*/, { error: 'Product not found' }];
-                        }
-                        return [3 /*break*/, 3];
+                        if (!getProduct) return [3 /*break*/, 3];
+                        getProduct.sniker = sniker;
+                        getProduct.brand = brand;
+                        getProduct.price = price;
+                        getProduct.thumbnail = thumbnail;
+                        getProduct.description = description;
+                        return [4 /*yield*/, fs.promises.writeFile(this.filePath, JSON.stringify(products, null, 2))];
                     case 2:
+                        _a.sent();
+                        return [3 /*break*/, 4];
+                    case 3: return [2 /*return*/, { error: 'Product not found' }];
+                    case 4: return [3 /*break*/, 6];
+                    case 5:
                         error_4 = _a.sent();
                         console.log(error_4);
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
+                        return [3 /*break*/, 6];
+                    case 6: return [2 /*return*/];
                 }
             });
         }); };

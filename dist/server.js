@@ -50,9 +50,7 @@ app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use('/api/productos', routerProducts);
 app.use(express_1.default.static(__dirname + './dist/public'));
-app.get('/', function (req, res) {
-    res.sendFile(__dirname + '/index.html');
-});
+//GET admin / usuarios
 routerProducts.get('/', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var allProducts;
     return __generator(this, function (_a) {
@@ -79,6 +77,13 @@ routerProducts.get('/:id', function (req, res) { return __awaiter(void 0, void 0
         }
     });
 }); });
+//POST admin
+routerProducts.post('/', function (req, res) {
+    var body = req.body;
+    products.post(body);
+    res.json({ success: true, producto: 'se ha subido correctamente' });
+});
+//PUT admin
 routerProducts.put('/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var id, allProductos, body;
     return __generator(this, function (_a) {
@@ -90,7 +95,8 @@ routerProducts.put('/:id', function (req, res) { return __awaiter(void 0, void 0
                 allProductos = _a.sent();
                 if (!(id <= allProductos.length)) return [3 /*break*/, 3];
                 body = req.body;
-                return [4 /*yield*/, products.put(id, body.sniker, body.brand)];
+                console.log(body);
+                return [4 /*yield*/, products.put(id, body.sniker, body.brand, body.price, body.thumbnail, body.description)];
             case 2:
                 _a.sent();
                 res.json({ succes: true, producto: 'producto actualizado con exito' });
@@ -102,6 +108,7 @@ routerProducts.put('/:id', function (req, res) { return __awaiter(void 0, void 0
         }
     });
 }); });
+//DELETE admin
 routerProducts.delete('/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var id, allProductos, id_1;
     return __generator(this, function (_a) {

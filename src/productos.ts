@@ -41,13 +41,17 @@ export class Productos {
       console.log(error);
     }
   };
-  put = async (id: string, sniker: string, brand: string) => {
+  put = async (id: string, sniker: string, brand: string, price: string, thumbnail: string, description: string) => {
     try {
       const products: any = await this.getAll();
       const getProduct = products.find((product: any) => product.id === id);
       if (getProduct) {
         getProduct.sniker = sniker;
         getProduct.brand = brand;
+        getProduct.price = price;
+        getProduct.thumbnail = thumbnail;
+        getProduct.description = description;
+        await fs.promises.writeFile(this.filePath, JSON.stringify(products, null, 2));
       } else {
         return { error: 'Product not found' };
       }
