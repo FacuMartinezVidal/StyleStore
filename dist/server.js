@@ -49,19 +49,10 @@ var port = process.env.PORT || 8080;
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use('/api/productos', routerProducts);
-app.get('/', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var allProducts;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                res.send('<h1>Pagina Inicial Ecommerce</h1>');
-                return [4 /*yield*/, products.getAll()];
-            case 1:
-                allProducts = _a.sent();
-                return [2 /*return*/];
-        }
-    });
-}); });
+app.use(express_1.default.static(__dirname + './dist/public'));
+app.get('/', function (req, res) {
+    res.sendFile(__dirname + '/index.html');
+});
 routerProducts.get('/', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var allProducts;
     return __generator(this, function (_a) {

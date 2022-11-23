@@ -8,9 +8,10 @@ const port = process.env.PORT || 8080;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/api/productos', routerProducts);
-app.get('/', async (req, res) => {
-  res.send('<h1>Pagina Inicial Ecommerce</h1>');
-  const allProducts = await products.getAll();
+app.use(express.static(__dirname + './dist/public'));
+
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/index.html');
 });
 routerProducts.get('/', async (req, res) => {
   const allProducts = await products.getAll();
