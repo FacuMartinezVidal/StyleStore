@@ -1,1 +1,3 @@
-Glitch Server: https://pagina-con-websockets.glitch.me
+Glitch Server:
+        -Live site: https://stylestore.glitch.me
+        -Code: https://glitch.com/edit/#!/stylestore
