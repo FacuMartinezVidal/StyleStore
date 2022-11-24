@@ -70,7 +70,13 @@ var Productos = /** @class */ (function () {
                     case 1:
                         products = _a.sent();
                         getProduct = products.find(function (product) { return product.id === id; });
-                        return [2 /*return*/, getProduct];
+                        if (getProduct) {
+                            return [2 /*return*/, getProduct];
+                        }
+                        else {
+                            return [2 /*return*/, { error: 'true', description: 'No product with such id' }];
+                        }
+                        return [3 /*break*/, 3];
                     case 2:
                         error_2 = _a.sent();
                         console.log(error_2);
@@ -80,11 +86,18 @@ var Productos = /** @class */ (function () {
             });
         }); };
         this.post = function (newProduct) { return __awaiter(_this, void 0, void 0, function () {
-            var products, id, id, fixId, error_3;
+            var fechaActual, fecha, fechaFormat, code, formatCode, products, id, id, fixId, error_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 3, , 4]);
+                        fechaActual = Date.now();
+                        fecha = new Date(fechaActual);
+                        fechaFormat = fecha.toLocaleString();
+                        newProduct['timestamp'] = fechaFormat;
+                        code = Math.floor(Math.random() * 1000);
+                        formatCode = code.toLocaleString();
+                        newProduct['code'] = formatCode;
                         return [4 /*yield*/, this.getAll()];
                     case 1:
                         products = _a.sent();
@@ -115,7 +128,7 @@ var Productos = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 5, , 6]);
+                        _a.trys.push([0, 4, , 5]);
                         return [4 /*yield*/, this.getAll()];
                     case 1:
                         products = _a.sent();
@@ -129,14 +142,13 @@ var Productos = /** @class */ (function () {
                         return [4 /*yield*/, fs.promises.writeFile(this.filePath, JSON.stringify(products, null, 2))];
                     case 2:
                         _a.sent();
-                        return [3 /*break*/, 4];
-                    case 3: return [2 /*return*/, { error: 'Product not found' }];
-                    case 4: return [3 /*break*/, 6];
-                    case 5:
+                        _a.label = 3;
+                    case 3: return [3 /*break*/, 5];
+                    case 4:
                         error_4 = _a.sent();
                         console.log(error_4);
-                        return [3 /*break*/, 6];
-                    case 6: return [2 /*return*/];
+                        return [3 /*break*/, 5];
+                    case 5: return [2 /*return*/];
                 }
             });
         }); };
@@ -151,7 +163,7 @@ var Productos = /** @class */ (function () {
                         products = _a.sent();
                         getProduct = products.find(function (product) { return product.id === id; });
                         if (!getProduct) {
-                            return [2 /*return*/, { error: 'No product witch such id ' }];
+                            console.log({ error: 'true', description: 'No product witch such id ' });
                         }
                         filterProducts = products.filter(function (producto) { return producto.id != id; });
                         return [4 /*yield*/, fs.promises.writeFile(this.filePath, JSON.stringify(filterProducts, null))];
@@ -171,8 +183,3 @@ var Productos = /** @class */ (function () {
     return Productos;
 }());
 exports.Productos = Productos;
-// async function print() {
-//   const objeto = new Productos();
-//   console.log(await objeto.getAll());
-// }
-// print();

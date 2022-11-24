@@ -40,17 +40,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var productos_1 = require("./productos");
+var carrito_1 = require("./carrito");
 var express_1 = __importDefault(require("express"));
 var express_2 = require("express");
 var app = (0, express_1.default)();
 var routerProducts = (0, express_2.Router)();
+var routerCarrito = (0, express_2.Router)();
 var products = new productos_1.Productos();
+var carrito = new carrito_1.Carrito();
 var port = process.env.PORT || 8080;
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use('/api/productos', routerProducts);
+app.use('/api/carrito', routerCarrito);
 app.use(express_1.default.static(__dirname + './dist/public'));
+var ADMIN = true;
+// const ADMIN: boolean = false;
 //GET admin / usuarios
+app.get('/*', function (req, res) {
+    res.json({ error: -2, descripcion: "RUTA: https://localhost:".concat(port, " METHOD:GET no implementado") });
+});
+//PRODUCTOS
 routerProducts.get('/', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var allProducts;
     return __generator(this, function (_a) {
@@ -77,14 +87,70 @@ routerProducts.get('/:id', function (req, res) { return __awaiter(void 0, void 0
         }
     });
 }); });
+//CARRITO
+routerCarrito.get('/', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var getCarrito;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, carrito.get()];
+            case 1:
+                getCarrito = _a.sent();
+                res.json(getCarrito);
+                return [2 /*return*/];
+        }
+    });
+}); });
 //POST admin
-routerProducts.post('/', function (req, res) {
+app.post('/*', function (req, res) {
+    res.json({ error: -2, descripcion: "RUTA: https://localhost:".concat(port, " METHOD:POST no implementado") });
+});
+//PRODUCTOS
+routerProducts.post('/', function (req, res, next) {
+    if (ADMIN) {
+        next();
+    }
+    else {
+        return res.json({ error: -1, descripcion: "RUTA: https://localhost:".concat(port, "/api/productos METHOD:POST no autorizado") });
+    }
+}, function (req, res) {
     var body = req.body;
     products.post(body);
     res.json({ success: true, producto: 'se ha subido correctamente' });
 });
+//CARRITO
+routerCarrito.post('/', function (req, res) {
+    carrito.postCarrito();
+    res.json({ succes: 'true', carrito: 'se ha creado un carrito' });
+});
+routerCarrito.post('/:idCarrito/:idProducto', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var idCarrito, idProducto, product;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                idCarrito = req.params.idCarrito;
+                idProducto = req.params.idProducto;
+                return [4 /*yield*/, products.getById(idProducto)];
+            case 1:
+                product = _a.sent();
+                carrito.postProduct(Number(idCarrito), product);
+                res.json({ succes: 'true', carrito: 'se ha subido producto al carrito' });
+                return [2 /*return*/];
+        }
+    });
+}); });
 //PUT admin
-routerProducts.put('/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+app.put('/*', function (req, res) {
+    res.json({ error: -2, descripcion: "RUTA: https://localhost:".concat(port, " METHOD:PUT no implementado") });
+});
+//PRODUCTOS
+routerProducts.put('/:id', function (req, res, next) {
+    if (ADMIN) {
+        next();
+    }
+    else {
+        return res.json({ error: -1, descripcion: "RUTA: https://localhost:".concat(port, "/api/productos METHOD:PUT no autorizado") });
+    }
+}, function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var id, allProductos, body;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -109,7 +175,18 @@ routerProducts.put('/:id', function (req, res) { return __awaiter(void 0, void 0
     });
 }); });
 //DELETE admin
-routerProducts.delete('/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+app.delete('/*', function (req, res) {
+    res.json({ error: -2, descripcion: "RUTA: https://localhost:".concat(port, " METHOD:GET no implementado") });
+});
+//PRODUCTOS
+routerProducts.delete('/:id', function (req, res, next) {
+    if (ADMIN) {
+        next();
+    }
+    else {
+        return res.json({ error: -1, descripcion: "RUTA: https://localhost:".concat(port, "/api/productos METHOD:DELETE no autorizado") });
+    }
+}, function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var id, allProductos, id_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -123,13 +200,59 @@ routerProducts.delete('/:id', function (req, res) { return __awaiter(void 0, voi
                 return [4 /*yield*/, products.deleteById(id_1)];
             case 2:
                 _a.sent();
-                res.json({ succes: true, producto: 'producto eliminado' });
+                res.json({ succes: true, producto: 'product deleted' });
                 return [3 /*break*/, 4];
             case 3:
-                res.json({ error: true, producto: 'producto no encontrado' });
+                res.json({ error: true, producto: 'product not founded' });
                 _a.label = 4;
             case 4: return [2 /*return*/];
         }
     });
 }); });
-app.listen(port, function () { return console.log("The server is running in: http://localhost:".concat(port)); });
+//CARRITO
+routerCarrito.delete('/:idCarrito', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var idCarrito, carritos;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                idCarrito = req.params.idCarrito;
+                return [4 /*yield*/, carrito.get()];
+            case 1:
+                carritos = _a.sent();
+                if (!(idCarrito <= carritos.length)) return [3 /*break*/, 3];
+                return [4 /*yield*/, carrito.deleteCarrito(Number(idCarrito))];
+            case 2:
+                _a.sent();
+                res.json({ succes: true, carrito: 'carrito empty' });
+                return [3 /*break*/, 4];
+            case 3:
+                res.json({ error: true, carrito: 'carrito not founded' });
+                _a.label = 4;
+            case 4: return [2 /*return*/];
+        }
+    });
+}); });
+routerCarrito.delete('/:idCarrito/:idProducto', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var idCarrito, idProducto, carritos;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                idCarrito = req.params.idCarrito;
+                idProducto = req.params.idProducto;
+                return [4 /*yield*/, carrito.get()];
+            case 1:
+                carritos = _a.sent();
+                if (!(idCarrito <= carritos.length)) return [3 /*break*/, 3];
+                return [4 /*yield*/, carrito.deleteProduct(Number(idCarrito), Number(idProducto))];
+            case 2:
+                _a.sent();
+                res.json({ succes: true, carrito: 'carrito empty' });
+                return [3 /*break*/, 4];
+            case 3:
+                res.json({ error: true, carrito: 'carrito not founded' });
+                _a.label = 4;
+            case 4: return [2 /*return*/];
+        }
+    });
+}); });
+app.listen(port, function () { return console.log("The server is running in: http://localhost:".concat(port, "/api/productos")); });

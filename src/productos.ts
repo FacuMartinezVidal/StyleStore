@@ -19,13 +19,24 @@ export class Productos {
     try {
       const products: object[] = await this.getAll();
       const getProduct = products.find((product: any) => product.id === id);
-      return getProduct;
+      if (getProduct) {
+        return getProduct;
+      } else {
+        return { error: 'true', description: 'No product with such id' };
+      }
     } catch (error) {
       console.log(error);
     }
   };
-  post = async (newProduct: { sniker: string; brand: string; id?: string }) => {
+  post = async (newProduct: { sniker: string; brand: string; price: string; thumbnail: string; description: string; timestamp: string; code: string; id?: string }) => {
     try {
+      const fechaActual = Date.now();
+      const fecha: Date = new Date(fechaActual);
+      const fechaFormat: string = fecha.toLocaleString();
+      newProduct['timestamp'] = fechaFormat;
+      const code: number = Math.floor(Math.random() * 1000);
+      const formatCode: string = code.toLocaleString();
+      newProduct['code'] = formatCode;
       const products: object[] = await this.getAll();
       if (products.length === 0) {
         const id: string = '0';
@@ -52,8 +63,6 @@ export class Productos {
         getProduct.thumbnail = thumbnail;
         getProduct.description = description;
         await fs.promises.writeFile(this.filePath, JSON.stringify(products, null, 2));
-      } else {
-        return { error: 'Product not found' };
       }
     } catch (error) {
       console.log(error);
@@ -64,7 +73,7 @@ export class Productos {
       const products: object[] = await this.getAll();
       const getProduct = products.find((product: any) => product.id === id);
       if (!getProduct) {
-        return { error: 'No product witch such id ' };
+        console.log({ error: 'true', description: 'No product witch such id ' });
       }
       const filterProducts: object[] = products.filter((producto: any) => producto.id != id);
       await fs.promises.writeFile(this.filePath, JSON.stringify(filterProducts, null));
@@ -73,9 +82,3 @@ export class Productos {
     }
   };
 }
-
-// async function print() {
-//   const objeto = new Productos();
-//   console.log(await objeto.getAll());
-// }
-// print();
