@@ -54,8 +54,19 @@ app.use(express_1.default.urlencoded({ extended: true }));
 app.use('/api/productos', routerProducts);
 app.use('/api/carrito', routerCarrito);
 app.use(express_1.default.static(__dirname + './dist/public'));
-var ADMIN = true;
-// const ADMIN: boolean = false;
+function random() {
+    var code = Math.floor(Math.random() * 2);
+    if (code == 1) {
+        var ADMIN = false;
+        return ADMIN;
+    }
+    else {
+        var ADMIN = true;
+        return ADMIN;
+    }
+}
+var valueADMIN = random();
+console.log(valueADMIN);
 //GET admin / usuarios
 app.get('/*', function (req, res) {
     res.json({ error: -2, descripcion: "RUTA: https://localhost:".concat(port, " METHOD:GET no implementado") });
@@ -106,7 +117,7 @@ app.post('/*', function (req, res) {
 });
 //PRODUCTOS
 routerProducts.post('/', function (req, res, next) {
-    if (ADMIN) {
+    if (valueADMIN) {
         next();
     }
     else {
@@ -115,12 +126,12 @@ routerProducts.post('/', function (req, res, next) {
 }, function (req, res) {
     var body = req.body;
     products.post(body);
-    res.json({ success: true, producto: 'se ha subido correctamente' });
+    res.json({ success: true, producto: 'se ha subido el producto correctamente' });
 });
 //CARRITO
 routerCarrito.post('/', function (req, res) {
     carrito.postCarrito();
-    res.json({ succes: 'true', carrito: 'se ha creado un carrito' });
+    res.json({ succes: 'true', carrito: 'se ha creado un carrito con exito' });
 });
 routerCarrito.post('/:idCarrito/:idProducto', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var idCarrito, idProducto, product;
@@ -133,7 +144,7 @@ routerCarrito.post('/:idCarrito/:idProducto', function (req, res) { return __awa
             case 1:
                 product = _a.sent();
                 carrito.postProduct(Number(idCarrito), product);
-                res.json({ succes: 'true', carrito: 'se ha subido producto al carrito' });
+                res.json({ succes: 'true', carrito: 'se ha subido producto al carrito de manera exitosa' });
                 return [2 /*return*/];
         }
     });
@@ -143,8 +154,9 @@ app.put('/*', function (req, res) {
     res.json({ error: -2, descripcion: "RUTA: https://localhost:".concat(port, " METHOD:PUT no implementado") });
 });
 //PRODUCTOS
+routerProducts.put('/:id');
 routerProducts.put('/:id', function (req, res, next) {
-    if (ADMIN) {
+    if (valueADMIN) {
         next();
     }
     else {
@@ -176,11 +188,11 @@ routerProducts.put('/:id', function (req, res, next) {
 }); });
 //DELETE admin
 app.delete('/*', function (req, res) {
-    res.json({ error: -2, descripcion: "RUTA: https://localhost:".concat(port, " METHOD:GET no implementado") });
+    res.json({ error: -2, descripcion: "RUTA: https://localhost:".concat(port, " METHOD:DELETE no implementado") });
 });
 //PRODUCTOS
 routerProducts.delete('/:id', function (req, res, next) {
-    if (ADMIN) {
+    if (valueADMIN) {
         next();
     }
     else {
@@ -200,10 +212,10 @@ routerProducts.delete('/:id', function (req, res, next) {
                 return [4 /*yield*/, products.deleteById(id_1)];
             case 2:
                 _a.sent();
-                res.json({ succes: true, producto: 'product deleted' });
+                res.json({ succes: true, producto: 'producto elimnado con exito' });
                 return [3 /*break*/, 4];
             case 3:
-                res.json({ error: true, producto: 'product not founded' });
+                res.json({ error: true, producto: 'producto no encontrado' });
                 _a.label = 4;
             case 4: return [2 /*return*/];
         }
@@ -223,10 +235,10 @@ routerCarrito.delete('/:idCarrito', function (req, res) { return __awaiter(void 
                 return [4 /*yield*/, carrito.deleteCarrito(Number(idCarrito))];
             case 2:
                 _a.sent();
-                res.json({ succes: true, carrito: 'carrito empty' });
+                res.json({ succes: true, carrito: 'se ha eliminado el carrito' });
                 return [3 /*break*/, 4];
             case 3:
-                res.json({ error: true, carrito: 'carrito not founded' });
+                res.json({ error: true, carrito: 'no se ha encontrado ese carrito' });
                 _a.label = 4;
             case 4: return [2 /*return*/];
         }
@@ -246,10 +258,10 @@ routerCarrito.delete('/:idCarrito/:idProducto', function (req, res) { return __a
                 return [4 /*yield*/, carrito.deleteProduct(Number(idCarrito), Number(idProducto))];
             case 2:
                 _a.sent();
-                res.json({ succes: true, carrito: 'carrito empty' });
+                res.json({ succes: true, carrito: 'se ha eliminado correctamente el producto del carrito' });
                 return [3 /*break*/, 4];
             case 3:
-                res.json({ error: true, carrito: 'carrito not founded' });
+                res.json({ error: true, carrito: 'carrito no encontrado' });
                 _a.label = 4;
             case 4: return [2 /*return*/];
         }

@@ -14,8 +14,20 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/productos', routerProducts);
 app.use('/api/carrito', routerCarrito);
 app.use(express.static(__dirname + './dist/public'));
-const ADMIN: boolean = true;
-// const ADMIN: boolean = false;
+
+function random(): boolean {
+  const code: number = Math.floor(Math.random() * 2);
+  if (code == 1) {
+    const ADMIN = false;
+    return ADMIN;
+  } else {
+    const ADMIN = true;
+    return ADMIN;
+  }
+}
+const valueADMIN = random();
+console.log(valueADMIN);
+
 //GET admin / usuarios
 app.get('/*', (req, res) => {
   res.json({ error: -2, descripcion: `RUTA: https://localhost:${port} METHOD:GET no implementado` });
@@ -44,7 +56,7 @@ app.post('/*', (req, res) => {
 routerProducts.post(
   '/',
   (req, res, next: NextFunction) => {
-    if (ADMIN) {
+    if (valueADMIN) {
       next();
     } else {
       return res.json({ error: -1, descripcion: `RUTA: https://localhost:${port}/api/productos METHOD:POST no autorizado` });
@@ -53,30 +65,31 @@ routerProducts.post(
   (req, res) => {
     const { body } = req;
     products.post(body);
-    res.json({ success: true, producto: 'se ha subido correctamente' });
+    res.json({ success: true, producto: 'se ha subido el producto correctamente' });
   }
 );
 //CARRITO
 routerCarrito.post('/', (req, res) => {
   carrito.postCarrito();
-  res.json({ succes: 'true', carrito: 'se ha creado un carrito' });
+  res.json({ succes: 'true', carrito: 'se ha creado un carrito con exito' });
 });
 routerCarrito.post('/:idCarrito/:idProducto', async (req, res) => {
   const idCarrito = req.params.idCarrito;
   const idProducto = req.params.idProducto;
   const product = await products.getById(idProducto);
   carrito.postProduct(Number(idCarrito), product);
-  res.json({ succes: 'true', carrito: 'se ha subido producto al carrito' });
+  res.json({ succes: 'true', carrito: 'se ha subido producto al carrito de manera exitosa' });
 });
 //PUT admin
 app.put('/*', (req, res) => {
   res.json({ error: -2, descripcion: `RUTA: https://localhost:${port} METHOD:PUT no implementado` });
 });
 //PRODUCTOS
+routerProducts.put('/:id');
 routerProducts.put(
   '/:id',
   (req, res, next: NextFunction) => {
-    if (ADMIN) {
+    if (valueADMIN) {
       next();
     } else {
       return res.json({ error: -1, descripcion: `RUTA: https://localhost:${port}/api/productos METHOD:PUT no autorizado` });
@@ -98,13 +111,13 @@ routerProducts.put(
 
 //DELETE admin
 app.delete('/*', (req, res) => {
-  res.json({ error: -2, descripcion: `RUTA: https://localhost:${port} METHOD:GET no implementado` });
+  res.json({ error: -2, descripcion: `RUTA: https://localhost:${port} METHOD:DELETE no implementado` });
 });
 //PRODUCTOS
 routerProducts.delete(
   '/:id',
   (req, res, next: NextFunction) => {
-    if (ADMIN) {
+    if (valueADMIN) {
       next();
     } else {
       return res.json({ error: -1, descripcion: `RUTA: https://localhost:${port}/api/productos METHOD:DELETE no autorizado` });
@@ -116,9 +129,9 @@ routerProducts.delete(
     if (id <= allProductos.length) {
       const { id } = req.params;
       await products.deleteById(id);
-      res.json({ succes: true, producto: 'product deleted' });
+      res.json({ succes: true, producto: 'producto elimnado con exito' });
     } else {
-      res.json({ error: true, producto: 'product not founded' });
+      res.json({ error: true, producto: 'producto no encontrado' });
     }
   }
 );
@@ -128,9 +141,9 @@ routerCarrito.delete('/:idCarrito', async (req, res) => {
   const carritos = await carrito.get();
   if (idCarrito <= carritos.length) {
     await carrito.deleteCarrito(Number(idCarrito));
-    res.json({ succes: true, carrito: 'carrito empty' });
+    res.json({ succes: true, carrito: 'se ha eliminado el carrito' });
   } else {
-    res.json({ error: true, carrito: 'carrito not founded' });
+    res.json({ error: true, carrito: 'no se ha encontrado ese carrito' });
   }
 });
 routerCarrito.delete('/:idCarrito/:idProducto', async (req, res) => {
@@ -139,9 +152,9 @@ routerCarrito.delete('/:idCarrito/:idProducto', async (req, res) => {
   const carritos = await carrito.get();
   if (idCarrito <= carritos.length) {
     await carrito.deleteProduct(Number(idCarrito), Number(idProducto));
-    res.json({ succes: true, carrito: 'carrito empty' });
+    res.json({ succes: true, carrito: 'se ha eliminado correctamente el producto del carrito' });
   } else {
-    res.json({ error: true, carrito: 'carrito not founded' });
+    res.json({ error: true, carrito: 'carrito no encontrado' });
   }
 });
 app.listen(port, () => console.log(`The server is running in: http://localhost:${port}/api/productos`));

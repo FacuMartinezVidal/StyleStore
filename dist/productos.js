@@ -74,7 +74,7 @@ var Productos = /** @class */ (function () {
                             return [2 /*return*/, getProduct];
                         }
                         else {
-                            return [2 /*return*/, { error: 'true', description: 'No product with such id' }];
+                            return [2 /*return*/, { error: 'true', description: 'No existe producto con ese id' }];
                         }
                         return [3 /*break*/, 3];
                     case 2:
@@ -163,7 +163,7 @@ var Productos = /** @class */ (function () {
                         products = _a.sent();
                         getProduct = products.find(function (product) { return product.id === id; });
                         if (!getProduct) {
-                            console.log({ error: 'true', description: 'No product witch such id ' });
+                            console.log({ error: 'true', description: 'No existe producto con ese id' });
                         }
                         filterProducts = products.filter(function (producto) { return producto.id != id; });
                         return [4 /*yield*/, fs.promises.writeFile(this.filePath, JSON.stringify(filterProducts, null))];

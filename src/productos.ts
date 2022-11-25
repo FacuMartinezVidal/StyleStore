@@ -22,7 +22,7 @@ export class Productos {
       if (getProduct) {
         return getProduct;
       } else {
-        return { error: 'true', description: 'No product with such id' };
+        return { error: 'true', description: 'No existe producto con ese id' };
       }
     } catch (error) {
       console.log(error);
@@ -73,7 +73,7 @@ export class Productos {
       const products: object[] = await this.getAll();
       const getProduct = products.find((product: any) => product.id === id);
       if (!getProduct) {
-        console.log({ error: 'true', description: 'No product witch such id ' });
+        console.log({ error: 'true', description: 'No existe producto con ese id' });
       }
       const filterProducts: object[] = products.filter((producto: any) => producto.id != id);
       await fs.promises.writeFile(this.filePath, JSON.stringify(filterProducts, null));
