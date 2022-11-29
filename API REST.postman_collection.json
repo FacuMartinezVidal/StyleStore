@@ -143,7 +143,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/carrito",
+							"raw": "http://localhost:8080/api/carrito/1/productos",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -151,7 +151,9 @@
 							"port": "8080",
 							"path": [
 								"api",
-								"carrito"
+								"carrito",
+								"1",
+								"productos"
 							]
 						}
 					},
@@ -236,7 +238,7 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/carrito/1/1",
+							"raw": "http://localhost:8080/api/carrito/1/1/productos",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -246,7 +248,8 @@
 								"api",
 								"carrito",
 								"1",
-								"1"
+								"1",
+								"productos"
 							]
 						}
 					},
