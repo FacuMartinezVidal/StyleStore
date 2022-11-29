@@ -10,6 +10,16 @@
       "timestamp": "23/11/2022, 21:17:21",
       "code": "132",
       "id": "1"
+    },
+    {
+      "sniker": "Air I",
+      "brand": "Jordan",
+      "price": "USD$ 400",
+      "thumbnail": "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/f094af40-f82f-4fb9-a246-e031bf6fc411/calzado-air-force-1-07-b19lqD.png",
+      "description": "El pasado 2014 vuelven las Air Jordan 1 Retro AJKO Chicago. Al igual que con el primer par lanzado en 1986, el diseño viste un esquema de colores muy similar al de las Jordan 1 OG 'Chicago'. La única diferencia notable es el talón blanco en contraposición con la talonera roja en las Chicago. Este par cuenta con una construcción de lienzo y superposiciones rojas cosidas sobre la base blanca.",
+      "timestamp": "23/11/2022, 21:17:21",
+      "code": "234",
+      "id": "2"
     }
   ],
   [{ "id": "2", "timestamp": "23/11/2022, 21:20:42" }],

@@ -15,17 +15,18 @@ app.use('/api/productos', routerProducts);
 app.use('/api/carrito', routerCarrito);
 app.use(express.static(__dirname + './dist/public'));
 
-function random(): boolean {
-  const code: number = Math.floor(Math.random() * 2);
-  if (code == 1) {
-    const ADMIN = false;
-    return ADMIN;
-  } else {
-    const ADMIN = true;
-    return ADMIN;
-  }
-}
-const valueADMIN = random();
+// function random(): boolean {
+//   const code: number = Math.floor(Math.random() * 2);
+//   if (code == 1) {
+//     const ADMIN = false;
+//     return ADMIN;
+//   } else {
+//     const ADMIN = true;
+//     return ADMIN;
+//   }
+// }
+// const valueADMIN = random();
+const valueADMIN = true;
 console.log(valueADMIN);
 
 //GET admin / usuarios
@@ -43,9 +44,15 @@ routerProducts.get('/:id', async (req, res) => {
   res.json(producto);
 });
 //CARRITO
-routerCarrito.get('/', async (req, res) => {
-  const getCarrito = await carrito.get();
-  res.json(getCarrito);
+routerCarrito.get('/:idCarrito/productos', async (req, res) => {
+  const idCarrito = req.params.idCarrito;
+  const carritos = await carrito.get();
+  const getCarrito = carritos[Number(idCarrito) - 1];
+  if (getCarrito) {
+    res.json(getCarrito);
+  } else {
+    res.json({ error: true, description: 'carrito no encontrado' });
+  }
 });
 
 //POST admin
@@ -73,7 +80,7 @@ routerCarrito.post('/', (req, res) => {
   carrito.postCarrito();
   res.json({ succes: 'true', carrito: 'se ha creado un carrito con exito' });
 });
-routerCarrito.post('/:idCarrito/:idProducto', async (req, res) => {
+routerCarrito.post('/:idCarrito/:idProducto/productos', async (req, res) => {
   const idCarrito = req.params.idCarrito;
   const idProducto = req.params.idProducto;
   const product = await products.getById(idProducto);
@@ -100,7 +107,6 @@ routerProducts.put(
     const allProductos = await products.getAll();
     if (id <= allProductos.length) {
       const { body } = req;
-      console.log(body);
       await products.put(id, body.sniker, body.brand, body.price, body.thumbnail, body.description);
       res.json({ succes: true, producto: 'producto actualizado con exito' });
     } else {
@@ -150,9 +156,15 @@ routerCarrito.delete('/:idCarrito/:idProducto', async (req, res) => {
   const idCarrito = req.params.idCarrito;
   const idProducto = req.params.idProducto;
   const carritos = await carrito.get();
-  if (idCarrito <= carritos.length) {
-    await carrito.deleteProduct(Number(idCarrito), Number(idProducto));
-    res.json({ succes: true, carrito: 'se ha eliminado correctamente el producto del carrito' });
+  const getCarrito = carritos[Number(idCarrito) - 1];
+  if (getCarrito) {
+    const getProducto = carritos[Number(idCarrito) - 1][idProducto];
+    if (getProducto) {
+      await carrito.deleteProduct(Number(idCarrito), Number(idProducto));
+      res.json({ succes: true, carrito: 'se ha eliminado correctamente el producto del carrito' });
+    } else {
+      res.json({ error: true, carrito: 'producto no encontrado' });
+    }
   } else {
     res.json({ error: true, carrito: 'carrito no encontrado' });
   }

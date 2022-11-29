@@ -54,18 +54,18 @@ app.use(express_1.default.urlencoded({ extended: true }));
 app.use('/api/productos', routerProducts);
 app.use('/api/carrito', routerCarrito);
 app.use(express_1.default.static(__dirname + './dist/public'));
-function random() {
-    var code = Math.floor(Math.random() * 2);
-    if (code == 1) {
-        var ADMIN = false;
-        return ADMIN;
-    }
-    else {
-        var ADMIN = true;
-        return ADMIN;
-    }
-}
-var valueADMIN = random();
+// function random(): boolean {
+//   const code: number = Math.floor(Math.random() * 2);
+//   if (code == 1) {
+//     const ADMIN = false;
+//     return ADMIN;
+//   } else {
+//     const ADMIN = true;
+//     return ADMIN;
+//   }
+// }
+// const valueADMIN = random();
+var valueADMIN = true;
 console.log(valueADMIN);
 //GET admin / usuarios
 app.get('/*', function (req, res) {
@@ -99,14 +99,22 @@ routerProducts.get('/:id', function (req, res) { return __awaiter(void 0, void 0
     });
 }); });
 //CARRITO
-routerCarrito.get('/', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var getCarrito;
+routerCarrito.get('/:idCarrito/productos', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var idCarrito, carritos, getCarrito;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, carrito.get()];
+            case 0:
+                idCarrito = req.params.idCarrito;
+                return [4 /*yield*/, carrito.get()];
             case 1:
-                getCarrito = _a.sent();
-                res.json(getCarrito);
+                carritos = _a.sent();
+                getCarrito = carritos[Number(idCarrito) - 1];
+                if (getCarrito) {
+                    res.json(getCarrito);
+                }
+                else {
+                    res.json({ error: true, description: 'carrito no encontrado' });
+                }
                 return [2 /*return*/];
         }
     });
@@ -133,7 +141,7 @@ routerCarrito.post('/', function (req, res) {
     carrito.postCarrito();
     res.json({ succes: 'true', carrito: 'se ha creado un carrito con exito' });
 });
-routerCarrito.post('/:idCarrito/:idProducto', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+routerCarrito.post('/:idCarrito/:idProducto/productos', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var idCarrito, idProducto, product;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -173,7 +181,6 @@ routerProducts.put('/:id', function (req, res, next) {
                 allProductos = _a.sent();
                 if (!(id <= allProductos.length)) return [3 /*break*/, 3];
                 body = req.body;
-                console.log(body);
                 return [4 /*yield*/, products.put(id, body.sniker, body.brand, body.price, body.thumbnail, body.description)];
             case 2:
                 _a.sent();
@@ -245,7 +252,7 @@ routerCarrito.delete('/:idCarrito', function (req, res) { return __awaiter(void 
     });
 }); });
 routerCarrito.delete('/:idCarrito/:idProducto', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var idCarrito, idProducto, carritos;
+    var idCarrito, idProducto, carritos, getCarrito, getProducto;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -254,16 +261,23 @@ routerCarrito.delete('/:idCarrito/:idProducto', function (req, res) { return __a
                 return [4 /*yield*/, carrito.get()];
             case 1:
                 carritos = _a.sent();
-                if (!(idCarrito <= carritos.length)) return [3 /*break*/, 3];
+                getCarrito = carritos[Number(idCarrito) - 1];
+                if (!getCarrito) return [3 /*break*/, 5];
+                getProducto = carritos[Number(idCarrito) - 1][idProducto];
+                if (!getProducto) return [3 /*break*/, 3];
                 return [4 /*yield*/, carrito.deleteProduct(Number(idCarrito), Number(idProducto))];
             case 2:
                 _a.sent();
                 res.json({ succes: true, carrito: 'se ha eliminado correctamente el producto del carrito' });
                 return [3 /*break*/, 4];
             case 3:
-                res.json({ error: true, carrito: 'carrito no encontrado' });
+                res.json({ error: true, carrito: 'producto no encontrado' });
                 _a.label = 4;
-            case 4: return [2 /*return*/];
+            case 4: return [3 /*break*/, 6];
+            case 5:
+                res.json({ error: true, carrito: 'carrito no encontrado' });
+                _a.label = 6;
+            case 6: return [2 /*return*/];
         }
     });
 }); });
